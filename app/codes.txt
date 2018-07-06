@@ -1,0 +1,305 @@
+<!-- <?php 
+  include('includes/header.php');
+  include('config/functions.php');
+
+
+    $email = "";
+    $username = "";
+    $password = "";
+    $password2 = "";
+    $hashed_password = "";
+    $error_array = array();
+
+          function validateRegisterForm () {
+
+               $username = strip_tags($_POST['reg_name']);
+               $email = strip_tags($_POST['reg_email']);
+               $password = strip_tags($_POST['reg_password']);
+               $password2 = strip_tags($_POST['reg_password2']);
+              $error_array = array();
+               validateUsername($username);
+               validateEmail($email);
+               validatePassword($password, $password2);
+          }
+
+
+  if(isset($_POST['reg_button'])) {
+
+    
+
+       
+  if (validateRegisterForm()) {
+          // $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+          $sqlinsert = "INSERT INTO users (username, password, email, join_date) 
+            VALUES ('$username', '$password', '$email', now())";
+
+            if (mysqli_query($db, $sqlinsert)) {
+             array_push($error_array, "<p style='padding:20px; background-color:green; color:white; text-align:center; width:100%;'>Registration Successful, You can now login</p>");
+
+              //clear session variables
+               $_SESSION['reg_name'] = "";
+               $_SESSION['reg_email'] = "";
+               $_SESSION['reg_password'] = "";
+               $_SESSION['reg_password2'] = "";
+
+            } else {
+            $errorresult = "<p style='padding:20px; background-color:red; color:white; text-align:center; width:100%;'>An Error occurred</p>";
+            echo $errorresult;
+          }
+
+
+       }
+
+
+
+  }
+
+
+  
+?>
+         
+          <div class="main-content">
+           <div class="row form-row">
+          <div class="col-md-4 col-xl-6 ml-auto mr-auto">
+            <div class="card card-signup">
+             
+              <form class="form" method="post" action="register.php">
+                 <?php if (in_array("<p style='padding:20px; background-color:green; color:white; text-align:center; width:100%;'>Registration Successful</p>", $error_array)) echo "<p style='padding:20px; background-color:green; color:white; text-align:center; width:100%;'>Registration Successful</p>"; ?>
+              <h3 style="text-align: center;">LOGIN</h3>
+              <p style="font-style: italic; text-align: center;">Please fill in your login details</p>
+                <p class="text-divider"></p>
+                <div class="card-body">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="material-icons">face</i></span>
+                    </div>
+                    <input type="text" class="form-control" name="reg_name" value="<?php if(isset($_SESSION['reg_name'])) {
+          echo $_SESSION['reg_name'];} ?>" placeholder="Username...">
+                  </div>
+               <?php if (in_array('Sorry username must be between 2 and 25 characters long<br />', $error_array)) echo 'Sorry username must be between 2 and 25 characters long<br />'; ?>
+                 <?php if (in_array('username already exists in our database, please try another one or add numbers to your username<br />', $error_array)) {echo 'username already exists in our database, please try another one or add numbers to your username<br />';} ?>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">email</i>
+                      </span>
+                    </div>
+                    <input type="email" class="form-control" name="reg_email" value="<?php if(isset($_SESSION['reg_email'])) {
+          echo $_SESSION['reg_email'];} ?>" placeholder="Email...">
+                  </div>
+                   <?php if (in_array("Email already in use<br />", $error_array)) echo "Email already in use<br />"; ?>
+                 <?php if (in_array("Invalid email format<br />", $error_array)) {echo "Invalid email format<br />";} ?>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">lock_outline</i>
+                      </span>
+                    </div>
+                    <input type="password" class="form-control" name="reg_password" placeholder="Password...">
+                  </div>
+                   <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">lock_outline</i>
+                      </span>
+                    </div>
+                    <input type="password" class="form-control" name="reg_password2" placeholder="Retype Password...">
+                  </div>
+                  <?php if (in_array('Password one and password two does not match!', $error_array)) echo 'Password one and password two does not match!<br />'; ?>
+                 <?php if (in_array("Your password must contain only English characters and numbers<br />", $error_array)) {echo "Your password must contain only English characters and numbers<br />";} ?>
+                 <?php if (in_array("Your password must be between 5 and 30 characters<br />", $error_array)) {echo "Your password must be between 5 and 30 characters<br />";} ?>
+                  <!-- If you want to add a checkbox to this form, uncomment this code
+
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="">
+                        Subscribe to newsletter
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div> -->
+                </div>
+                <div class="card-footer justify-content-center">
+                  <input type="submit" name="reg_button" value="REGISTER" class="btn btn-link btn-primary btn-lg">
+                </div>
+                <p style="text-align: center;">Already Registered? <a href="login.php">Login Here</a></p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div>
+
+<?php 
+  include('includes/footer.php');
+?> -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <?php
+include('config.php');
+  function checkEmpty($value) {
+    if (empty($value)) {
+      return true;
+    }
+  }
+
+  function checkNumeric($value) {
+    if (is_numeric($value)) {
+      return true;
+    }
+  }
+
+         function validateUsername($username) {
+          $error_array = array();
+
+            if (checkEmpty($username) == false) {
+                if (checkNumeric($username) == false) {
+
+                      if (strlen($username) > 25 || strlen($username) < 2) {
+                          array_push($error_array, 'Sorry username must be between 2 and 25 characters long<br />');
+                      }
+                      else {
+
+                       $username = str_replace(' ', '_', $username);
+                       $username = ucfirst(strtolower($username));
+                        //check if there is an existing username
+                        $check_username_query = mysqli_query($db, "SELECT username FROM users WHERE username='$username'");
+                        if (mysqli_num_rows($check_username_query) != 0) {
+                          array_push($error_array, 'username already exists in our database, please try another one or add numbers to your username<br />');
+                        }
+                        else {
+                          $_SESSION['reg_name'] = $username; 
+                        }
+
+                     }
+                   }
+                   else {
+                       array_push($error_array, 'Username must contain numbers<br />');
+             
+                   }
+             } 
+             else {
+              array_push($error_array, 'Username cannot be empty<br />');
+             }
+         }
+
+         function validateEmail($email) {
+              $error_array = array();
+
+           if (checkEmpty($email) == false) {
+                if (checkNumeric($email) == false) {
+                    
+                    $email = ucfirst(strtolower($email));
+                    
+                      if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                      $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+                      //check if email already exists
+                      $e_check = mysqli_query($db, "SELECT email FROM users WHERE email='$email'");
+
+                      //count no. of rows returned
+                          if (mysqli_num_rows($e_check) > 0) {
+                            array_push($error_array, "Email already in use<br />");
+                          }
+                          else {
+                             $_SESSION['reg_email'] = $email;
+                          }
+                      }
+                      else {
+                        array_push($error_array, "Invalid email format<br />");
+                      }
+
+                }
+                else {
+                        array_push($error_array, 'Email must contain alphabets<br />');
+                }
+           }
+           else {
+               array_push($error_array, 'Email cannot be empty<br />');
+           }
+         }
+
+         function validatePassword($password, $password2) {
+              $error_array = array();
+
+            if (checkEmpty($password)) {
+                
+                   if ($password != $password2) {
+                        array_push($error_array, 'Password one and password two does not match!');
+                      }
+                      else {
+                            if (preg_match('/[^A-Za-z0-9]/', $password)) {
+                                array_push($error_array, "Your password must contain only English characters and numbers<br />");
+                            }
+                            else {
+                              if (strlen($password > 30 || strlen($password) < 5)) {
+                                 array_push($error_array, "Your password must be between 5 and 30 characters<br />");
+                               }
+                            }
+                      }
+
+            }
+            else {
+                array_push($error_array, 'Password field cannot be empty!<br />');
+            }
+         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // if (isset($_POST['email'])) {
+  //   $email = $_POST['email'];
+  //   $username = $_POST['username'];
+  //   $password = $_POST['password'];
+
+  //   try {
+
+  //   $sqlinsert = "INSERT INTO users {username, email, password, join_date} VALUES {:username, :email, :password, now()}";
+  //   $statement = $db->prepare($sqlinsert);
+  //   $statement->execute(array(':username' => $username, ':email' => $password, ':password' => $password));
+  //   if ($statement->rowCount() == 1) {
+  //     $result = "Registration Successful";
+  //   }
+  // }
+  // catch(PDOException $ex) {
+  //     $result = "An error occured";
+  // }
+
+  //   $sql = "INSERT INTO users (username, password, email, join_date) VALUES ('$username', '$password', '$email')";
+  //   if (mysql_query($con, $sql)) {
+  //     echo "connection successfull";
+  //   }
+
+
+
+  // }
